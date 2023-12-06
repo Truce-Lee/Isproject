@@ -1,0 +1,12 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+#    driver-class-name: spring.datasource.driver-class-name=org.postgresql.Driver
+      url: jdbc:postgresql://localhost:5432/postgres?serverTimezone=GMT%2b8
+      username: postgres
+      password: 123456
+
+
+
