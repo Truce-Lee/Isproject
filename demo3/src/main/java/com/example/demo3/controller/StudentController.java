@@ -6,7 +6,9 @@ import com.example.demo3.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/student")
@@ -18,14 +20,38 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping
-    public Integer save(@RequestBody Student student){
-       return studentService.save(student);
-
+//    新增修改
+    public Integer save(@RequestBody Student student) {
+        return studentService.save(student);
+//        return studentService.insert(student);
     }
+
     @GetMapping
-    public List<Student> index(){
+//    查询
+    public List<Student> index() {
 
         return studentMapper.findall();
 
     }
+
+    @DeleteMapping("/{student_id}")
+    public Integer delete(@PathVariable Integer student_id) {
+        studentMapper.deleteById(student_id);
+        return studentMapper.deleteById(student_id);
+    }
+
+//    分特查询
+//    接口路径:/student/page?pageNum=1&pageSize=10
+    @GetMapping("/page")
+    public Map<String, Object> findPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        pageNum = (pageNum - 1) * pageSize;
+        List<Student> data = studentMapper.selectPage(pageNum, pageSize);
+        Integer total = studentMapper.selectTotal();
+        Map<String, Object> res = new HashMap<>();
+        res.put("data", data);
+        res.put("total", total);
+        return res;
+    }
+
 }
+

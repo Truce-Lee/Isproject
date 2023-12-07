@@ -2,4 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo3.mapper.StudentMapper">
+    <update id="update">
+        update student
+        <set>
+            <if test="name != null">
+            name = #{name},
+            </if>
+
+            <if test="age != null">
+            age= #{age},
+            </if>
+
+            <if test="sex != null">
+            sex =#{sex},
+            </if>
+
+            <if test="email != null">
+            email= #{email},
+            </if>
+
+            <if test="phone_number != null">
+                phone_number=#{phone_number},
+            </if>
+
+        </set>
+        <where>
+            student_id = #{student_id}
+        </where>
+    </update>
 </mapper>
