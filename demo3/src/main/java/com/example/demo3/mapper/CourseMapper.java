@@ -27,6 +27,6 @@ public interface CourseMapper {
     @Select("Select * from course  limit #{pageSize} offset #{pageNum}")
     List<Course> selectPage(Integer pageNum, Integer pageSize);
 
-    @Select("SELECT COUNT(*) FROM course like concat('%', #{name}, '%')")
+    @Select("SELECT COUNT(*) FROM course ")
     Integer selectTotal();
 }
