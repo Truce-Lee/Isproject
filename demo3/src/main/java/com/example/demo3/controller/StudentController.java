@@ -1,6 +1,7 @@
 package com.example.demo3.controller;
 
 import com.example.demo3.entity.Student;
+import com.example.demo3.entity.User;
 import com.example.demo3.mapper.StudentMapper;
 import com.example.demo3.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @PostMapping
+    @PostMapping("/save")
 //    新增修改
     public Integer save(@RequestBody Student student) {
         return studentService.save(student);
@@ -51,6 +52,12 @@ public class StudentController {
         res.put("data", data);
         res.put("total", total);
         return res;
+    }
+
+    @PostMapping("/change")
+    public Integer save(@RequestBody User user) {
+        return studentService.change(user);
+//        return studentService.insert(student);
     }
 
 }

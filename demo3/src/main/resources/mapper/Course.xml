@@ -22,7 +22,11 @@
             </if>
 
             <if test="activity_time != null">
-                activity_time= #{activity_time}
+                activity_time= #{activity_time},
+            </if>
+
+            <if test="syllabus != null">
+                syllabus = #{syllabus}
             </if>
 
 

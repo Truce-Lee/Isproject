@@ -70,6 +70,7 @@
             <el-form-item label="DETAILS" >
               <el-input v-model="form.description" autocomplete="off"></el-input>
             </el-form-item>
+
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">cancel</el-button>

@@ -1,5 +1,6 @@
 package com.example.demo3.controller;
 
+import com.example.demo3.controller.dto.UserDTO;
 import com.example.demo3.entity.Course;
 import com.example.demo3.mapper.CourseMapper;
 import com.example.demo3.service.CourseService;
@@ -13,6 +14,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/course")
 public class CourseController {
+
+
     @Autowired
     private CourseMapper courseMapper;
 
@@ -20,11 +23,18 @@ public class CourseController {
     private CourseService courseService;
 
     @PostMapping
+
+//    public boolean login(@RequestBody UserDTO userDTO){
+//        return UserService.login(userDTO);
+//    }
+
 //    新增修改
+
     public Integer save(@RequestBody Course course) {
         return courseService.save(course);
 //        return studentService.insert(student);
     }
+
 
     @GetMapping
 //    查询
@@ -43,14 +53,15 @@ public class CourseController {
     //    分特查询
 //    接口路径:/student/page?pageNum=1&pageSize=10
     @GetMapping("/page")
-    public Map<String, Object> findPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+    public Map<String, Object> findPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize,@RequestParam String name) {
         pageNum = (pageNum - 1) * pageSize;
-        List<Course> data = courseMapper.selectPage(pageNum, pageSize);
-        Integer total = courseMapper.selectTotal();
+        List<Course> data = courseMapper.selectPage(pageNum, pageSize,name);
+        Integer total = courseMapper.selectTotal(name);
         Map<String, Object> res = new HashMap<>();
         res.put("data", data);
         res.put("total", total);
         return res;
     }
+
 
 }

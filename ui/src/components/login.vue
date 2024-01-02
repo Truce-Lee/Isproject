@@ -4,19 +4,25 @@
     <div class="login-box">
       <!-- 头像 -->
       <div class="login-avatar">
-<!--        <img src="@/assets/logo.png" alt />-->
+        <img src="@/assets/th.jpeg"  />
       </div>
-
       <!-- 登录表单 -->
-      <el-form class="login-form" ref="loginFormRef" :model="studentLoginForm" :rules="studentLoginFormRules">
+      <el-form class="login-form" ref="loginFormRef" :model="user" :rules="studentLoginFormRules">
         <h3>login</h3>
         <!-- 用户名 -->
-        <el-form-item prop="username">
-          <el-input v-model="studentLoginForm.username" placeholder="enter the e-mail" prefix-icon="iconfont iconicon"></el-input>
+        <el-form-item prop="name">
+          <el-input  v-model="user.name" placeholder="enter the username" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
-          <el-input v-model="studentLoginForm.password" placeholder="enter the passwd" @keyup.enter.native="login" prefix-icon="iconfont iconmima" type="password"></el-input>
+          <el-input show-password v-model="user.password" placeholder="enter the passwd"  prefix-icon="el-icon-lock" ></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+        <el-radio-group v-model="ratio">
+          <el-radio-button label="teacher" ></el-radio-button>
+          <el-radio-button label="student" ></el-radio-button>
+          <el-radio-button label="administrator"></el-radio-button>
+        </el-radio-group>
         </el-form-item>
         <!-- 按钮 -->
         <el-form-item class="button">
@@ -24,7 +30,33 @@
           <el-button type="info" @click="registerNo">register</el-button>
         </el-form-item>
       </el-form>
+
     </div>
+      <el-dialog class="el-dialog__body" title="Register" :visible.sync="dialogFormVisible" >
+        <el-form width="1000px" ref="loginFormRef" :model="user" :rules="studentLoginFormRules">
+          <!-- Username -->
+          <el-form-item prop="name">
+            <el-input v-model="user.name" placeholder="Enter the username" prefix-icon="el-icon-user"></el-input>
+          </el-form-item>
+          <!-- Password -->
+          <el-form-item prop="password">
+            <el-input v-model="user.password" placeholder="Enter the password" prefix-icon="el-icon-lock"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-radio-group v-model="ratio">
+              <el-radio-button label="teacher" ></el-radio-button>
+              <el-radio-button label="student" ></el-radio-button>
+              <el-radio-button label="administrator"></el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="handleRegister">Complete</el-button>
+        </div>
+      </el-dialog>
+
   </div>
 </template>
 
@@ -33,60 +65,75 @@ export default {
   name: "Login",
   data() {
     return {
+      ratio: "user",
+      dialogFormVisible: false,
       // 登录表单的对象
-      studentLoginForm: {
-        username: ' ',
-        password: ''
+      user: {
+        name: '',
+        password: '',
+        role:''
       },
+
       studentLoginFormRules: {
-        username: [
-          { required: true, message: 'enter the e-mail', trigger: 'blur' },
-          { min: 3, max: 12, message: 'length between 5 to 12', trigger: 'blur' }
+        name: [
+          { required: true, message: 'enter the name', trigger: 'blur' },
+          { min: 3, max: 12, message: 'length between 3 to 12', trigger: 'blur' }
         ],
         password: [
           { required: true, message: 'enter the passwd', trigger: 'blur' },
-          { min: 3, max: 15, message: 'length between 5 to 12', trigger: 'blur' }
+          { min: 3, max: 15, message: 'length between 3 to 12', trigger: 'blur' }
         ]
       },
     }
   },
-  // methods: {
-  //
-  //   registerNo() {
-  //     // 跳转到注册页面
-  //     window.location.href="http://localhost:8081/#/student/register"
-  //   },
-  //
-  //   login() {
-  //     // 表单预验证
-  //     this.$refs.loginFormRef.validate(valid => {
-  //       if (!valid) return;
-  //       this.$axios.post('http://localhost:8080/student/login', {
-  //         username: this.studentLoginForm.username,
-  //         password: this.studentLoginForm.password
-  //       })
-  //           .then((res) => {
-  //             if (res.data.code == 0) {
-  //               // 成功响应,得到token
-  //               let ret = res.data.data
-  //               window.localStorage.setItem('token', ret.token)
-  //               window.localStorage.setItem('student', JSON.stringify(ret.student))
-  //               this.$router.push('/student')
-  //               this.$message({message: "登录成功", type: "success"})
-  //             } else {
-  //               alert(res.data.message)
-  //             }
-  //           }).catch((error) => {
-  //         // 失败
-  //         this.$message.error("登录失败")
-  //       });
-  //     })
-  //   }
-  // }
+  methods: {
+
+    registerNo() {
+      this.dialogFormVisible = true
+    },
+    handleRegister(){
+      this.$refs.loginFormRef.validate(valid => {
+        if (valid){
+          this.user.role = this.ratio
+          this.request.post('/register',this.user).then(res =>{
+            console.log(res)
+            if (res.code === '200'){
+              this.$message.success(res.msg)
+            }else {
+              this.$message.error(res.msg)
+            }
+          })
+        }})
+    },
+
+    login(){
+      this.$refs.loginFormRef.validate(valid => {
+            if (valid){
+              this.user.role = this.ratio
+              this.request.post('/login',this.user).then(res =>{
+                console.log(res)
+                if (res.code === '200'){
+                  this.$router.push('/user-course')
+                  this.$message.success(res.msg)
+                  localStorage.setItem("honey-user",JSON.stringify(res.data))
+                }else {
+                  this.$message.error(res.msg)
+                }
+              })
+            }})
+
+
+    }
+  }
 };
 </script>
 
 <style scoped>
+.el-dialog__body {
+  width: 800px;
+  margin: 0 auto;
+  //overflow: hidden;
+}
 
 .login-form {
   position: absolute;
@@ -122,8 +169,8 @@ export default {
   transform: translate(-50%, -50%);
   background-color: #fff;
   img {
-    height: 20%;
-    width: 20%;
+    height: 100%;
+    width: 100%;
     border-radius: 50%;
     background-color: #eee;
   }

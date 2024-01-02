@@ -12,4 +12,5 @@ public class Course {
     private String finish_time;
     private String description;
     private Integer activity_time;
+    private String syllabus;
 }

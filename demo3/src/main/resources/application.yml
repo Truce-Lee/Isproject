@@ -5,7 +5,7 @@ spring:
   datasource:
 #    driver-class-name: spring.datasource.driver-class-name=org.postgresql.Driver
 #      url: jdbc:postgresql://192.168.1.109:5432/postgres?serverTimezone=GMT%2b8
-      url: jdbc:postgresql://localhost:5432/postgres2?serverTimezone=GMT%2b8
+      url: jdbc:postgresql://${ip}:5432/postgres2?serverTimezone=GMT%2b8
       username: postgres
       password: 123456
 mybatis:
@@ -15,4 +15,5 @@ mybatis:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+ip: 192.168.1.105
 

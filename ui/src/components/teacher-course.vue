@@ -33,6 +33,17 @@
           <el-table-column prop="start_time" label="Start_Time"></el-table-column>
           <el-table-column prop="finish_time" label="Finish_Time"></el-table-column>
           <el-table-column prop="description" label="Details"></el-table-column>
+          <el-table-column label="Syllabus">
+            <template slot-scope="scope">
+              <el-button prop="syllabus" @click="download(scope.row)" type="text" size="small">Download</el-button>
+              <el-upload
+                  class="upload-demo"
+                  action="http://192.168.1.104:9090/file/upload"
+                  :on-success="(row,file,fileList) => handleTableFileUpload(scope.row , file, fileList)">
+                <el-button size="small" type="text">Upload</el-button>
+              </el-upload>
+            </template>
+          </el-table-column>
         </el-table>
 
       </el-main>
@@ -72,6 +83,7 @@
 
 <script>
 import MyInfo from "@/components/my-info.vue";
+import request from "@/utils/request";
 
 
 export default {
@@ -96,7 +108,6 @@ export default {
           pageNum:this.pageNum,
           pageSize:this.pageSize
 
-
         }
       }).then(res =>{
         console.log(res)
@@ -104,6 +115,17 @@ export default {
         this.total=res.total
       })
 
+    },
+    handleTableFileUpload(row,file,fileList){
+      row.syllabus = file.response.data
+      console.log(file.response.data)
+      request.post("/course",row).then(res =>{
+        if (res){
+          this.$message.success("save success")
+        }else {
+          this.$message.error("save failed")
+        }
+      })
     },
     handleSelect(val) {
       const currentRoute = this.$route;
@@ -121,6 +143,11 @@ export default {
     handleCurrentChange(pageNum){
       this.pageNum=pageNum
       this.load()
+    },
+    download(row){
+      console.log(row.syllabus)
+      window.open(row.syllabus)
+
     }
   }
 };

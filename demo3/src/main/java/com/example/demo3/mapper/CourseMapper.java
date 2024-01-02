@@ -11,9 +11,9 @@ import java.util.List;
 //@Mapper
 public interface CourseMapper {
     @Select("SELECT * FROM course")
-    List<Course> findall();
+    List<Course> findall(); 
 
-    @Insert("insert into course(name,start_time,finish_time,description,activity_time) VALUES (#{name},#{start_time},#{finish_time},#{description},#{activity_time})")
+    @Insert("insert into course(name,start_time,finish_time,description,activity_time,syllabus) VALUES (#{name},#{start_time},#{finish_time},#{description},#{activity_time},#{syllabus})")
     int insert(Course course);
 
 
@@ -24,9 +24,9 @@ public interface CourseMapper {
     @Delete("delete from course where course_id =#{course_id}")
     Integer deleteById(@Param("course_id") Integer course_id);
 
-    @Select("Select * from course  limit #{pageSize} offset #{pageNum}")
-    List<Course> selectPage(Integer pageNum, Integer pageSize);
+    @Select("Select * from course where name like '%' || #{name} || '%' limit #{pageSize} offset #{pageNum}")
+    List<Course> selectPage(Integer pageNum, Integer pageSize, String name);
 
-    @Select("SELECT COUNT(*) FROM course ")
-    Integer selectTotal();
+    @Select("SELECT COUNT(*) FROM course where name like '%' || #{name} || '%'")
+    Integer selectTotal(String name);
 }

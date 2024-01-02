@@ -72,6 +72,9 @@
                 v-model="form.description">
             </el-input>
           </el-form-item>
+          <el-form-item label="SYLLABUS">
+
+          </el-form-item>
           <el-form-item class="button">
             <el-button type="primary" @click="save">ADD</el-button>
           </el-form-item>
@@ -110,7 +113,8 @@ export default {
       start_time: "",
       finish_time: "",
       description: "",
-      activity_time: ""
+      activity_time: "",
+      fileList:[]
     }
   },
   methods: {
